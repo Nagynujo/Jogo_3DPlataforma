@@ -11,7 +11,10 @@ public class MouseMovement : MonoBehaviour
 
    public float topClamp = -90f;
    public float bottomClamp = 90f;
-
+     
+    public Camera cam;
+    public float distanciaInteracao = 3f;
+    public KeyCode teclaInteragir = KeyCode.E;
     void Start()
     {   
         // Travando mouse no centro da tela
@@ -38,11 +41,33 @@ public class MouseMovement : MonoBehaviour
         //Aplicando rotação no transform
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
 
-
-
-
-
-
+           if (Input.GetKeyDown(KeyCode.E))
+        {
+             Interact();
+        }
+        
+        
+        
 
     }
+    
+    
+    void Interact()
+    {
+        RaycastHit hit;
+
+        // Raycast da câmera para frente
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, distanciaInteracao))
+        {
+            // Tenta pegar o script de interação
+            Interactable interagivel = hit.collider.GetComponent<Interactable>();
+
+            if (interagivel != null)
+            {
+                interagivel.Interagir();
+            }
+        }
+    }
+
+    
 }
