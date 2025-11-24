@@ -4,6 +4,9 @@ using System.Collections;
 
 public class MouseMovement : MonoBehaviour
 {
+    public GameObject mensagemUI; 
+    public float tempoNaTela = 2f;
+
    public float mouseSensetivity = 100f;
 
    private float xRotation = 0f;
@@ -25,26 +28,31 @@ public class MouseMovement : MonoBehaviour
    
     void Update()
     {
-        // Inputs de movimento do mouse
+
+        
         float mouseX = Input.GetAxis("Mouse X") *mouseSensetivity * Time.deltaTime;
         float mouseY = Input.GetAxis("Mouse Y") *mouseSensetivity * Time.deltaTime;
 
-        // Olhando para cima e para baixo
+
         xRotation -= mouseY;
 
-        // Bloqueando rotação do player no eixo x  em 90 graus
+        
         xRotation = Mathf.Clamp(xRotation, topClamp, bottomClamp);
 
-        // Rodando no eixo y (olhando direita e esquerda)
+        
         yRotation += mouseX;
 
-        //Aplicando rotação no transform
+        
         transform.localRotation = Quaternion.Euler(xRotation, yRotation, 0f);
 
-           if (Input.GetKeyDown(KeyCode.E))
+    
+        if (Input.GetKeyDown(KeyCode.E))
         {
-             Interact();
+          Interact();
+          
         }
+       
+
         
         
         
@@ -56,10 +64,10 @@ public class MouseMovement : MonoBehaviour
     {
         RaycastHit hit;
 
-        // Raycast da câmera para frente
+        
         if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, distanciaInteracao))
         {
-            // Tenta pegar o script de interação
+            
             Interactable interagivel = hit.collider.GetComponent<Interactable>();
 
             if (interagivel != null)
@@ -67,7 +75,26 @@ public class MouseMovement : MonoBehaviour
                 interagivel.Interagir();
             }
         }
+        
+    
+    }
+    public void MostrarMensagem()
+    {
+        
+        
+        if (mensagemUI == null) return;
+
+        mensagemUI.SetActive(true);
+        CancelInvoke(); 
+        
+        
+       
+        
     }
 
+   public  void EsconderMensagem()
+    {
+        mensagemUI.SetActive(false);
+    }
     
 }
